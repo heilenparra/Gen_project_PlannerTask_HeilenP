@@ -110,15 +110,32 @@ btnCierraForm.addEventListener("click", function () {
     contenedorForm.close();
 });
 
+// Actualizar los contadores
+function actualizarContadores() {
+    document.getElementById("cantidadHacer").textContent =
+        administradorTareas.getTasksWithStatus("pendiente").length;
+
+    document.getElementById("cantidadProceso").textContent =
+        administradorTareas.getTasksWithStatus("proceso").length;
+
+    document.getElementById("cantidadRevision").textContent =
+        administradorTareas.getTasksWithStatus("revision").length;
+
+    document.getElementById("cantidadHechas").textContent =
+        administradorTareas.getTasksWithStatus("hecho").length;
+}
+
 // Mostrar una tarea en el tablero
 function mostrarTarea(tarea) {
 
     let columna;
 
-    if (tarea.estado === "hacer") {
+    if (tarea.estado === "pendiente") {
         columna = document.getElementById("tareasHacer");
-    } else if (tarea.estado === "proceso" || tarea.estado === "revision") {
+    } else if (tarea.estado === "proceso") {
         columna = document.getElementById("tareasProceso");
+    } else if (tarea.estado === "revision") {
+        columna = document.getElementById("tareasRevision");
     } else {
         columna = document.getElementById("tareasHechas");
     }
@@ -140,20 +157,78 @@ function mostrarTarea(tarea) {
     fecha.textContent = "Fecha de entrega: " + tarea.fechaDeEntrega;
 
     const estado = document.createElement("p");
-    estado.textContent = "Estado: " + tarea.estado;
+
+    if (tarea.estado === "pendiente") {
+        estado.textContent = "Estado: PENDIENTE";
+    } else if (tarea.estado === "proceso") {
+        estado.textContent = "Estado: EN PROGRESO";
+    } else if (tarea.estado === "revision") {
+        estado.textContent = "Estado: REVISIÓN";
+    } else {
+        estado.textContent = "Estado: HECHO";
+    }
 
     const btnEliminar = document.createElement("button");
     btnEliminar.type = "button";
+    btnEliminar.classList.add("btn");
     btnEliminar.textContent = "Eliminar";
 
     btnEliminar.addEventListener("click", function () {
         administradorTareas.deleteTask(tarea.id);
         tarjeta.remove();
+        actualizarContadores();
     });
 
     tarjeta.append(titulo, descripcion, asignado, fecha, estado, btnEliminar);
     columna.appendChild(tarjeta);
+
+    actualizarContadores();
 }
+
+// Crear cinco tareas de ejemplo
+const tareasEjemplo = [
+    {
+        nombre: "Diseñar página principal",
+        descripcion: "Preparar la estructura visual de la página principal.",
+        asignadoA: "Ana Martínez",
+        fechaDeEntrega: "2026-11-02",
+        estado: "pendiente"
+    },
+    {
+        nombre: "Crear formulario de tareas",
+        descripcion: "Construir los campos para registrar nuevas tareas.",
+        asignadoA: "Laura Gómez",
+        fechaDeEntrega: "2026-11-03",
+        estado: "pendiente"
+    },
+    {
+        nombre: "Validar datos ingresados",
+        descripcion: "Comprobar que los campos cumplan las reglas definidas.",
+        asignadoA: "Carlos Pérez",
+        fechaDeEntrega: "2026-11-04",
+        estado: "proceso"
+    },
+    {
+        nombre: "Revisar diseño de tarjetas",
+        descripcion: "Verificar que la información se muestre correctamente.",
+        asignadoA: "Sofía Torres",
+        fechaDeEntrega: "2026-11-05",
+        estado: "revision"
+    },
+    {
+        nombre: "Probar eliminación de tareas",
+        descripcion: "Comprobar que las tareas eliminadas desaparezcan del tablero.",
+        asignadoA: "Daniel Rojas",
+        fechaDeEntrega: "2026-11-06",
+        estado: "hecho"
+    }
+];
+
+// Agregar las tareas de ejemplo al tablero
+tareasEjemplo.forEach(function (tarea) {
+    administradorTareas.addTask(tarea);
+    mostrarTarea(tarea);
+});
 
 // Guardar una tarea desde el formulario
 formulario.addEventListener("submit", function (event) {
@@ -172,9 +247,7 @@ formulario.addEventListener("submit", function (event) {
     };
 
     administradorTareas.addTask(tarea);
-
-    const tareas = administradorTareas.getAllTasks();
-    mostrarTarea(tareas[tareas.length - 1]);
+    mostrarTarea(tarea);
 
     formulario.reset();
     contenedorForm.close();

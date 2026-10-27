@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>"My Planning Task"</title>
+    <title>My Planning Task</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,106 +11,117 @@
         <a href="#" class="brand-marca">
             <span>My Planning Task</span>
         </a>
-<button type="button" id="btnNuevaTarea-Newtask">New Task</button>
+        <button type="button" id="btnNuevaTarea-Newtask">New Task</button>
     </header>
-<main>
-    <section>
-        <h1>My Tasks</h1>
-        <p>Este es tu organizador de tareas</p>
-    </section>
-    <section class="task-board-tablero">
-        <!-- Primer contenedor TO DO -->
-        <div class="columna">
-            <div class="columna-encabezado">
-                <h2>TO DO</h2>
-                <span class="cantidad-task">0</span>
+
+    <main>
+        <section>
+            <h1>My Tasks</h1>
+            <p>Este es tu organizador de tareas</p>
+        </section>
+
+        <section class="task-board-tablero">
+            <!-- Primer contenedor TO DO -->
+            <div class="columna">
+                <div class="columna-encabezado">
+                    <h2>TO DO</h2>
+                    <span class="cantidad-task">0</span>
+                    <div id="tareasHacer"></div>
+                </div>
             </div>
-        </div>
-        <!-- Segundo contenedor IN PROGRESS -->
-        <div class="columna">
-            <div class="columna-encabezado">
-                <h2>IN PROGRESS</h2>
-                <span class="cantidad-task">0</span>
+
+            <!-- Segundo contenedor IN PROGRESS -->
+            <div class="columna">
+                <div class="columna-encabezado">
+                    <h2>IN PROGRESS</h2>
+                    <span class="cantidad-task">0</span>
+                    <div id="tareasProceso"></div>
+                </div>
             </div>
-        </div>
-         <!-- Tercer contenedor DONE -->
-        <div class="columna">
-            <div class="columna-encabezado">
-                <h2> DONE </h2>
-                <span class="cantidad-task">0</span>
+
+            <!-- Tercer contenedor DONE -->
+            <div class="columna">
+                <div class="columna-encabezado">
+                    <h2>DONE</h2>
+                    <span class="cantidad-task">0</span>
+                    <div id="tareasHechas"></div>
+                </div>
             </div>
+        </section>
+    </main>
+
+    <!-- Formulario para crear tareas -->
+    <dialog id="contenedorform">
+        <div class="encabezado-formNuevaTarea">
+            <h2>New Task</h2>
+            <button type="button" id="btncierraform">Cerrar</button>
         </div>
-    </section>
-</main>
-<!-- Form contenedor con etiqueta html /luego conectar con JS -->
-<dialog id="contenedorform" open>  <!-- lo dejamos abierto peroluego lo conectamos con JS -->
-        <div class ="encabezado-formNuevaTarea">
-        <h2>New Task</h2>
-        <button type="button" id="btncierraform">
-            Cerrar
-        </button>
-    </div>
-<!-- campos del form-- titulo tarea -->
-    <form id="form-tareas">
-        <div class="camposForm">
-            <label for="task-name">Task Tittle</label>
-            <input
-                type="text"
-                id="task-name"
-                name="title"
-                required
+
+        <form id="form-tareas">
+            <!-- Campo nombre de la tarea -->
+            <div class="camposForm">
+                <label for="task-name">Task Title</label>
+                <input
+                    type="text"
+                    id="task-name"
+                    name="nombre"
+                    required
                 >
             </div>
-<!-- campos del form-- Descripcion tarea -->
-        <div class="camposForm">
-            <label for="task-Description">Task Description</label>
-            <textarea
-                 id="task-Description"
-                name="Descripcion"
-                rows="2"
-              ></textarea>
+
+            <!-- Campo descripcion de la tarea -->
+            <div class="camposForm">
+                <label for="task-Description">Task Description</label>
+                <textarea
+                    id="task-Description"
+                    name="descripcion"
+                    rows="2"
+                    required
+                ></textarea>
             </div>
 
-<!-- campo del form-- tarea Asignada a  -->
-        <div class="camposForm">
-            <label for="task-assignment">Task Assignment</label>
-            <input
-                type="text"
-                id="task-assignment"
-                name="assignment"
-                ></div>
-<!-- campo del form-- Date  -->
-        <div class="camposForm">
-            <label for="task-date">Due Date</label>
-            <input
-                type="date"
-                id="task-date"
-                name="dueDate"
-            ></div>
-<!-- campo del form-- Status  -->
-        <div class="camposForm">
-            <label for="task-status">Status</label>
-            <select id="task-status" name="status">
-                <option value="hacer">TO DO</option>
-                <option value="proceso">IN PROGRESS</option>
-                <option value="hecho">DONE</option>
-            </select>
-        </div>
+            <!-- Campo tarea asignada a -->
+            <div class="camposForm">
+                <label for="task-assignment">Task Assignment</label>
+                <input
+                    type="text"
+                    id="task-assignment"
+                    name="asignadoA"
+                    required
+                >
+            </div>
 
+            <!-- Campo fecha de entrega -->
+            <div class="camposForm">
+                <label for="task-date">Due Date</label>
+                <input
+                    type="date"
+                    id="task-date"
+                    name="fechaDeEntrega"
+                    required
+                >
+            </div>
 
+            <!-- Campo estado de la tarea -->
+            <div class="camposForm">
+                <label for="task-status">Status</label>
+                <select id="task-status" name="estado" required>
+                    <option value="">Selecciona un estado</option>
+                    <option value="hacer">TO DO</option>
+                    <option value="proceso">IN PROGRESS</option>
+                    <option value="revision">REVISIÓN</option>
+                    <option value="hecho">DONE</option>
+                </select>
+            </div>
 
-    </form>
+            <!-- Boton para guardar la tarea -->
+            <div class="camposForm">
+                <button type="submit" id="btnGuardarTarea">Guardar tarea</button>
+            </div>
+        </form>
+    </dialog>
 
-
-
-
-</dialog>
-    
-
-
-    
+    <script src="script.js"></script>
 </body>
 </html>
-
-
-
+```

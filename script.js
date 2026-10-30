@@ -1,39 +1,34 @@
 
- // Validar los campos del formulario
 function validateTaskForm() {
 
-    // Obtener los valores del formulario
+// Constantes para traer la info del form
     const nombre = document.getElementById("task-name").value.trim();
     const descripcion = document.getElementById("task-Description").value.trim();
     const asignadoA = document.getElementById("task-assignment").value.trim();
     const fechaDeEntrega = document.getElementById("task-date").value;
     const estado = document.getElementById("task-status").value;
 
-    // Validar nombre de la tarea
+// Condicionales del form
     if (nombre === "" || nombre.length <= 8) {
         alert("El nombre debe tener más de 8 caracteres");
         return false;
     }
 
-    // Validar descripcion de la tarea
-    if (descripcion === "" || descripcion.length <= 15) {
-        alert("La descripcion debe tener más de 15 caracteres");
+    if (descripcion === "" || descripcion.length <= 8) {
+        alert("La descripcion debe tener más de 8 caracteres");
         return false;
     }
 
-    // Validar persona asignada
-    if (asignadoA === "" || asignadoA.length <= 8) {
-        alert("La asignacion debe tener más de 8 caracteres");
+    if (asignadoA === "" || asignadoA.length <= 3) {
+        alert("La asignacion debe tener más de 3 caracteres");
         return false;
     }
 
-    // Validar fecha de entrega
     if (fechaDeEntrega === "") {
         alert("Debes seleccionar una fecha de entrega");
         return false;
     }
 
-    // Validar estado de la tarea
     if (estado === "") {
         alert("Debes seleccionar un estado");
         return false;
@@ -42,37 +37,28 @@ function validateTaskForm() {
     return true;
 }
 
-// Administrar las tareas
+// Creamos la clase (blue print) del gestor de tareas y sus métodos.
 class TaskManager {
 
     constructor() {
         this.tareas = [];
         this.siguienteId = 1;
     }
-
-    // Obtener todas las tareas
     getAllTasks() {
         return this.tareas;
     }
-
-    // Obtener tareas por estado
     getTasksWithStatus(estado) {
         return this.tareas.filter(tarea => tarea.estado === estado);
     }
 
-    // Agregar una tarea
     addTask(tarea) {
         tarea.id = this.siguienteId;
         this.siguienteId++;
         this.tareas.push(tarea);
     }
-
-    // Eliminar una tarea
     deleteTask(taskId) {
         this.tareas = this.tareas.filter(tarea => tarea.id !== taskId);
     }
-
-    // Actualizar el estado de una tarea
     updateTask(taskId, estado) {
         const tarea = this.tareas.find(tarea => tarea.id === taskId);
 
@@ -80,8 +66,6 @@ class TaskManager {
             tarea.estado = estado;
         }
     }
-
-    // Cambiar la persona asignada
     assignTask(taskId, asignadoA) {
         const tarea = this.tareas.find(tarea => tarea.id === taskId);
 
@@ -91,14 +75,19 @@ class TaskManager {
     }
 }
 
-// Crear el administrador de tareas
+
+//vamos a construir ahora si el gestor  de taks
 const administradorTareas = new TaskManager();
+
+
+
 
 // Obtener elementos del HTML
 const formulario = document.getElementById("form-tareas");
 const contenedorForm = document.getElementById("contenedorform");
 const btnNuevaTarea = document.getElementById("btnNuevaTarea-Newtask");
 const btnCierraForm = document.getElementById("btncierraform");
+
 
 // Abrir formulario
 btnNuevaTarea.addEventListener("click", function () {
@@ -110,7 +99,7 @@ btnCierraForm.addEventListener("click", function () {
     contenedorForm.close();
 });
 
-// Actualizar los contadores
+// Cantidades que hay en los contadores y actualizarlos 
 function actualizarContadores() {
     document.getElementById("cantidadHacer").textContent =
         administradorTareas.getTasksWithStatus("pendiente").length;
@@ -141,7 +130,7 @@ function mostrarTarea(tarea) {
     }
 
     const tarjeta = document.createElement("div");
-    tarjeta.classList.add("tarjeta-tarea");
+     ("tarjeta-tarea");
     tarjeta.dataset.id = tarea.id;
 
     const titulo = document.createElement("h3");
@@ -185,7 +174,7 @@ function mostrarTarea(tarea) {
     actualizarContadores();
 }
 
-// Crear cinco tareas de ejemplo
+// Datos de prueba en JS . 
 const tareasEjemplo = [
     {
         nombre: "Diseñar página principal",

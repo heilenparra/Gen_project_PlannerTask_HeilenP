@@ -1,39 +1,34 @@
 
- // Validar los campos del formulario
 function validateTaskForm() {
 
-    // Obtener los valores del formulario
+// Constantes para traer la info del form
     const nombre = document.getElementById("task-name").value.trim();
     const descripcion = document.getElementById("task-Description").value.trim();
     const asignadoA = document.getElementById("task-assignment").value.trim();
     const fechaDeEntrega = document.getElementById("task-date").value;
     const estado = document.getElementById("task-status").value;
 
-    // Validar nombre de la tarea
+// Condicionales del form
     if (nombre === "" || nombre.length <= 8) {
         alert("El nombre debe tener más de 8 caracteres");
         return false;
     }
 
-    // Validar descripcion de la tarea
     if (descripcion === "" || descripcion.length <= 15) {
         alert("La descripcion debe tener más de 15 caracteres");
         return false;
     }
 
-    // Validar persona asignada
     if (asignadoA === "" || asignadoA.length <= 8) {
         alert("La asignacion debe tener más de 8 caracteres");
         return false;
     }
 
-    // Validar fecha de entrega
     if (fechaDeEntrega === "") {
         alert("Debes seleccionar una fecha de entrega");
         return false;
     }
 
-    // Validar estado de la tarea
     if (estado === "") {
         alert("Debes seleccionar un estado");
         return false;
@@ -42,63 +37,97 @@ function validateTaskForm() {
     return true;
 }
 
-// Administrar las tareas
+// Creamos la clase (blue print) del gestor de tareas y sus métodos.
 class TaskManager {
 
     constructor() {
         this.tareas = [];
         this.siguienteId = 1;
     }
+    save() {
+        localStorage.setItem("myPlanningTask.tasks", JSON.stringify(this.tareas));
+        localStorage.setItem("myPlanningTask.siguienteId", String(this.siguienteId));
+    }
+    load() {
+        const tareasGuardadas = localStorage.getItem("myPlanningTask.tasks");
 
-    // Obtener todas las tareas
+        if (tareasGuardadas === null) {
+            return false;
+        }
+
+        const tareas = JSON.parse(tareasGuardadas);
+        if (!Array.isArray(tareas)) {
+            throw new TypeError("Las tareas guardadas deben ser un arreglo.");
+        }
+
+        this.tareas = tareas;
+
+        const siguienteIdGuardado = localStorage.getItem("myPlanningTask.siguienteId");
+        const siguienteId = siguienteIdGuardado === null ? NaN : Number(siguienteIdGuardado);
+        const siguienteIdPorTareas = this.tareas.reduce(
+            (maxId, tarea) => Math.max(maxId, Number(tarea.id) || 0),
+            0
+        ) + 1;
+
+        if (siguienteIdGuardado !== null && (!Number.isInteger(siguienteId) || siguienteId < 1)) {
+            throw new TypeError("El siguiente ID guardado no es válido.");
+        }
+
+        this.siguienteId = Math.max(siguienteId || 1, siguienteIdPorTareas);
+        return true;
+    }
     getAllTasks() {
         return this.tareas;
     }
-
-    // Obtener tareas por estado
     getTasksWithStatus(estado) {
         return this.tareas.filter(tarea => tarea.estado === estado);
     }
+    getTaskById(taskId) {
+        return this.tareas.find(tarea => tarea.id === taskId);
+    }
 
-    // Agregar una tarea
     addTask(tarea) {
         tarea.id = this.siguienteId;
         this.siguienteId++;
         this.tareas.push(tarea);
+        this.save();
     }
-
-    // Eliminar una tarea
     deleteTask(taskId) {
         this.tareas = this.tareas.filter(tarea => tarea.id !== taskId);
+        this.save();
     }
-
-    // Actualizar el estado de una tarea
     updateTask(taskId, estado) {
         const tarea = this.tareas.find(tarea => tarea.id === taskId);
 
         if (tarea) {
             tarea.estado = estado;
+            this.save();
         }
     }
-
-    // Cambiar la persona asignada
     assignTask(taskId, asignadoA) {
         const tarea = this.tareas.find(tarea => tarea.id === taskId);
 
         if (tarea) {
             tarea.asignadoA = asignadoA;
+            this.save();
         }
     }
 }
 
-// Crear el administrador de tareas
+
+//vamos a construir ahora si el gestor  de taks
 const administradorTareas = new TaskManager();
+
+
+
 
 // Obtener elementos del HTML
 const formulario = document.getElementById("form-tareas");
 const contenedorForm = document.getElementById("contenedorform");
 const btnNuevaTarea = document.getElementById("btnNuevaTarea-Newtask");
 const btnCierraForm = document.getElementById("btncierraform");
+const tableroTareas = document.querySelector(".task-board-tablero");
+
 
 // Abrir formulario
 btnNuevaTarea.addEventListener("click", function () {
@@ -110,7 +139,7 @@ btnCierraForm.addEventListener("click", function () {
     contenedorForm.close();
 });
 
-// Actualizar los contadores
+// Cantidades que hay en los contadores y actualizarlos 
 function actualizarContadores() {
     document.getElementById("cantidadHacer").textContent =
         administradorTareas.getTasksWithStatus("pendiente").length;
@@ -123,6 +152,16 @@ function actualizarContadores() {
 
     document.getElementById("cantidadHechas").textContent =
         administradorTareas.getTasksWithStatus("hecho").length;
+}
+
+// Volver a dibujar todas las tareas desde el TaskManager
+function renderTasks() {
+    document.getElementById("tareasHacer").innerHTML = "";
+    document.getElementById("tareasProceso").innerHTML = "";
+    document.getElementById("tareasRevision").innerHTML = "";
+    document.getElementById("tareasHechas").innerHTML = "";
+
+    administradorTareas.getAllTasks().forEach(mostrarTarea);
 }
 
 // Mostrar una tarea en el tablero
@@ -170,22 +209,31 @@ function mostrarTarea(tarea) {
 
     const btnEliminar = document.createElement("button");
     btnEliminar.type = "button";
-    btnEliminar.classList.add("btn");
+    btnEliminar.classList.add("btn", "btn-eliminar");
     btnEliminar.textContent = "Eliminar";
 
     btnEliminar.addEventListener("click", function () {
         administradorTareas.deleteTask(tarea.id);
-        tarjeta.remove();
-        actualizarContadores();
+        renderTasks();
     });
 
-    tarjeta.append(titulo, descripcion, asignado, fecha, estado, btnEliminar);
+    tarjeta.append(titulo, descripcion, asignado, fecha, estado);
+
+    if (tarea.estado !== "hecho") {
+        const btnHecho = document.createElement("button");
+        btnHecho.type = "button";
+        btnHecho.classList.add("btn", "done-button");
+        btnHecho.textContent = "Marcar como hecha";
+        tarjeta.append(btnHecho);
+    }
+
+    tarjeta.append(btnEliminar);
     columna.appendChild(tarjeta);
 
     actualizarContadores();
 }
 
-// Crear cinco tareas de ejemplo
+// Datos de prueba en JS . 
 const tareasEjemplo = [
     {
         nombre: "Diseñar página principal",
@@ -224,11 +272,13 @@ const tareasEjemplo = [
     }
 ];
 
-// Agregar las tareas de ejemplo al tablero
-tareasEjemplo.forEach(function (tarea) {
-    administradorTareas.addTask(tarea);
-    mostrarTarea(tarea);
-});
+// Recuperar las tareas guardadas; usar ejemplos solo en la primera ejecución.
+if (!administradorTareas.load()) {
+    tareasEjemplo.forEach(function (tarea) {
+        administradorTareas.addTask(tarea);
+    });
+}
+renderTasks();
 
 // Guardar una tarea desde el formulario
 formulario.addEventListener("submit", function (event) {
@@ -247,8 +297,24 @@ formulario.addEventListener("submit", function (event) {
     };
 
     administradorTareas.addTask(tarea);
-    mostrarTarea(tarea);
+    renderTasks();
 
     formulario.reset();
     contenedorForm.close();
+});
+
+// Un solo listener para los botones de todas las tarjetas
+tableroTareas.addEventListener("click", function (event) {
+    if (!event.target.classList.contains("done-button")) {
+        return;
+    }
+
+    const tarjeta = event.target.parentElement;
+    const taskId = Number(tarjeta.dataset.id);
+    const tarea = administradorTareas.getTaskById(taskId);
+
+    if (tarea) {
+        administradorTareas.updateTask(taskId, "hecho");
+        renderTasks();
+    }
 });

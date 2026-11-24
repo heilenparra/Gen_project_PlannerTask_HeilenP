@@ -21,7 +21,7 @@ header {
     border-bottom: 1px solid #EACAD8;
 }
 
-.brand-marca {
+.banner {
     color: #713B53;
     font-size: 24px;
     font-weight: bold;
@@ -141,6 +141,10 @@ main {
 
 .tarjeta-tarea button {
     margin-top: 8px;
+}
+
+.tarjeta-tarea button + button {
+    margin-left: 8px;
 }
 
 /* Formulario emergente */

@@ -50,6 +50,9 @@ class TaskManager {
     getTasksWithStatus(estado) {
         return this.tareas.filter(tarea => tarea.estado === estado);
     }
+    getTaskById(taskId) {
+        return this.tareas.find(tarea => tarea.id === taskId);
+    }
 
     addTask(tarea) {
         tarea.id = this.siguienteId;
@@ -87,6 +90,7 @@ const formulario = document.getElementById("form-tareas");
 const contenedorForm = document.getElementById("contenedorform");
 const btnNuevaTarea = document.getElementById("btnNuevaTarea-Newtask");
 const btnCierraForm = document.getElementById("btncierraform");
+const tableroTareas = document.querySelector(".task-board-tablero");
 
 
 // Abrir formulario
@@ -112,6 +116,16 @@ function actualizarContadores() {
 
     document.getElementById("cantidadHechas").textContent =
         administradorTareas.getTasksWithStatus("hecho").length;
+}
+
+// Volver a dibujar todas las tareas desde el TaskManager
+function renderTasks() {
+    document.getElementById("tareasHacer").innerHTML = "";
+    document.getElementById("tareasProceso").innerHTML = "";
+    document.getElementById("tareasRevision").innerHTML = "";
+    document.getElementById("tareasHechas").innerHTML = "";
+
+    administradorTareas.getAllTasks().forEach(mostrarTarea);
 }
 
 // Mostrar una tarea en el tablero
@@ -159,16 +173,25 @@ function mostrarTarea(tarea) {
 
     const btnEliminar = document.createElement("button");
     btnEliminar.type = "button";
-    btnEliminar.classList.add("btn");
+    btnEliminar.classList.add("btn", "btn-eliminar");
     btnEliminar.textContent = "Eliminar";
 
     btnEliminar.addEventListener("click", function () {
         administradorTareas.deleteTask(tarea.id);
-        tarjeta.remove();
-        actualizarContadores();
+        renderTasks();
     });
 
-    tarjeta.append(titulo, descripcion, asignado, fecha, estado, btnEliminar);
+    tarjeta.append(titulo, descripcion, asignado, fecha, estado);
+
+    if (tarea.estado !== "hecho") {
+        const btnHecho = document.createElement("button");
+        btnHecho.type = "button";
+        btnHecho.classList.add("btn", "done-button");
+        btnHecho.textContent = "Marcar como hecha";
+        tarjeta.append(btnHecho);
+    }
+
+    tarjeta.append(btnEliminar);
     columna.appendChild(tarjeta);
 
     actualizarContadores();
@@ -216,8 +239,8 @@ const tareasEjemplo = [
 // Agregar las tareas de ejemplo al tablero
 tareasEjemplo.forEach(function (tarea) {
     administradorTareas.addTask(tarea);
-    mostrarTarea(tarea);
 });
+renderTasks();
 
 // Guardar una tarea desde el formulario
 formulario.addEventListener("submit", function (event) {
@@ -236,8 +259,24 @@ formulario.addEventListener("submit", function (event) {
     };
 
     administradorTareas.addTask(tarea);
-    mostrarTarea(tarea);
+    renderTasks();
 
     formulario.reset();
     contenedorForm.close();
+});
+
+// Un solo listener para los botones de todas las tarjetas
+tableroTareas.addEventListener("click", function (event) {
+    if (!event.target.classList.contains("done-button")) {
+        return;
+    }
+
+    const tarjeta = event.target.parentElement;
+    const taskId = Number(tarjeta.dataset.id);
+    const tarea = administradorTareas.getTaskById(taskId);
+
+    if (tarea) {
+        administradorTareas.updateTask(taskId, "hecho");
+        renderTasks();
+    }
 });

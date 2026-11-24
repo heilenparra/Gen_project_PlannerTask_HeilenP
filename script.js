@@ -44,6 +44,38 @@ class TaskManager {
         this.tareas = [];
         this.siguienteId = 1;
     }
+    save() {
+        localStorage.setItem("myPlanningTask.tasks", JSON.stringify(this.tareas));
+        localStorage.setItem("myPlanningTask.siguienteId", String(this.siguienteId));
+    }
+    load() {
+        const tareasGuardadas = localStorage.getItem("myPlanningTask.tasks");
+
+        if (tareasGuardadas === null) {
+            return false;
+        }
+
+        const tareas = JSON.parse(tareasGuardadas);
+        if (!Array.isArray(tareas)) {
+            throw new TypeError("Las tareas guardadas deben ser un arreglo.");
+        }
+
+        this.tareas = tareas;
+
+        const siguienteIdGuardado = localStorage.getItem("myPlanningTask.siguienteId");
+        const siguienteId = siguienteIdGuardado === null ? NaN : Number(siguienteIdGuardado);
+        const siguienteIdPorTareas = this.tareas.reduce(
+            (maxId, tarea) => Math.max(maxId, Number(tarea.id) || 0),
+            0
+        ) + 1;
+
+        if (siguienteIdGuardado !== null && (!Number.isInteger(siguienteId) || siguienteId < 1)) {
+            throw new TypeError("El siguiente ID guardado no es válido.");
+        }
+
+        this.siguienteId = Math.max(siguienteId || 1, siguienteIdPorTareas);
+        return true;
+    }
     getAllTasks() {
         return this.tareas;
     }
@@ -58,15 +90,18 @@ class TaskManager {
         tarea.id = this.siguienteId;
         this.siguienteId++;
         this.tareas.push(tarea);
+        this.save();
     }
     deleteTask(taskId) {
         this.tareas = this.tareas.filter(tarea => tarea.id !== taskId);
+        this.save();
     }
     updateTask(taskId, estado) {
         const tarea = this.tareas.find(tarea => tarea.id === taskId);
 
         if (tarea) {
             tarea.estado = estado;
+            this.save();
         }
     }
     assignTask(taskId, asignadoA) {
@@ -74,6 +109,7 @@ class TaskManager {
 
         if (tarea) {
             tarea.asignadoA = asignadoA;
+            this.save();
         }
     }
 }
@@ -236,10 +272,12 @@ const tareasEjemplo = [
     }
 ];
 
-// Agregar las tareas de ejemplo al tablero
-tareasEjemplo.forEach(function (tarea) {
-    administradorTareas.addTask(tarea);
-});
+// Recuperar las tareas guardadas; usar ejemplos solo en la primera ejecución.
+if (!administradorTareas.load()) {
+    tareasEjemplo.forEach(function (tarea) {
+        administradorTareas.addTask(tarea);
+    });
+}
 renderTasks();
 
 // Guardar una tarea desde el formulario

@@ -14,13 +14,13 @@ function validateTaskForm() {
         return false;
     }
 
-    if (descripcion === "" || descripcion.length <= 8) {
-        alert("La descripcion debe tener más de 8 caracteres");
+    if (descripcion === "" || descripcion.length <= 15) {
+        alert("La descripcion debe tener más de 15 caracteres");
         return false;
     }
 
-    if (asignadoA === "" || asignadoA.length <= 3) {
-        alert("La asignacion debe tener más de 3 caracteres");
+    if (asignadoA === "" || asignadoA.length <= 8) {
+        alert("La asignacion debe tener más de 8 caracteres");
         return false;
     }
 
@@ -130,7 +130,7 @@ function mostrarTarea(tarea) {
     }
 
     const tarjeta = document.createElement("div");
-     ("tarjeta-tarea");
+    tarjeta.classList.add("tarjeta-tarea");
     tarjeta.dataset.id = tarea.id;
 
     const titulo = document.createElement("h3");

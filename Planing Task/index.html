@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +8,51 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <header>
-        <a href="#" class="banner">My Planning Task</a>
+<body>
+    
+<!-- Fondos animados para los temas -->
+<div class="fondos-animados">
+
+    <!-- Fondo modo claro -->
+    <video id="videoModoClaro" class="video-fondo" autoplay muted loop playsinline>
+        <source src="assets/backgrounds/clouds-light.mp4" type="video/mp4">
+    </video>
+
+    <!-- Fondo modo oscuro -->
+    <video id="videoModoOscuro" class="video-fondo" autoplay muted loop playsinline>
+        <source src="assets/backgrounds/night-dark.mp4" type="video/mp4">
+    </video>
+
+</div>
+<header>
+    <a href="#" class="banner">My Planning Task</a>
+
+    <div class="header-acciones">
+
+        <!-- Personalización del tema -->
+        <div class="toggle-tema">
+
+            <button id="btnModoClaro" type="button" aria-label="Modo claro">
+                ☀
+            </button>
+
+            <button id="btnModoOscuro" type="button" aria-label="Modo oscuro">
+                ☾
+            </button>
+
+        </div>
+
         <button type="button" id="btnNuevaTarea-Newtask" class="btn">
             Nueva Tarea
         </button>
-    </header>
+
+    </div>
+</header>
 
     <main class="container-fluid">
         <section class="titulo-principal">
-            <h1>Mis Tareas</h1>
+            <h1></h1>
             <p>Este es tu organizador de tareas</p>
         </section>
 
@@ -76,56 +109,27 @@
 
             <div class="camposForm">
                 <label for="task-name">Nombre de la tarea</label>
-                <input
-                    type="text"
-                    id="task-name"
-                    name="nombre"
-                    class="form-control"
-                    required
-                >
+                <input type="text" id="task-name" name="nombre" class="form-control" required>
             </div>
 
             <div class="camposForm">
                 <label for="task-Description">Descripción</label>
-                <textarea
-                    id="task-Description"
-                    name="descripcion"
-                    class="form-control"
-                    rows="3"
-                    required
-                ></textarea>
+                <textarea id="task-Description" name="descripcion" class="form-control" rows="3" required></textarea>
             </div>
 
             <div class="camposForm">
                 <label for="task-assignment">Asignado a</label>
-                <input
-                    type="text"
-                    id="task-assignment"
-                    name="asignadoA"
-                    class="form-control"
-                    required
-                >
+                <input type="text" id="task-assignment" name="asignadoA" class="form-control" required>
             </div>
 
             <div class="camposForm">
                 <label for="task-date">Fecha de entrega</label>
-                <input
-                    type="date"
-                    id="task-date"
-                    name="fechaDeEntrega"
-                    class="form-control"
-                    required
-                >
+                <input type="date" id="task-date" name="fechaDeEntrega" class="form-control" required>
             </div>
 
             <div class="camposForm">
                 <label for="task-status">Estado</label>
-                <select
-                    id="task-status"
-                    name="estado"
-                    class="form-select"
-                    required 
-                >
+                <select id="task-status" name="estado" class="form-select" required>
                     <option value="">Selecciona un estado</option>
                     <option value="pendiente">PENDIENTE</option>
                     <option value="proceso">EN PROGRESO</option>
@@ -145,4 +149,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

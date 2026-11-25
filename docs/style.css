@@ -1,0 +1,519 @@
+/* General */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: transparent;
+    color: #713B53;
+    transition: color 0.5s ease;
+}
+
+
+/* Encabezado */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    background-color: rgba(255, 251, 253, 0.85);
+    border-bottom: 1px solid #EACAD8;
+    transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+
+.banner {
+    color: #713B53;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+/* Acciones del encabezado */
+
+.header-acciones {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+
+/* Botones */
+
+button.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #D96C96;
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+button.btn:hover {
+    background-color: #BD507C;
+    color: white;
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+
+/* Contenido principal */
+
+main {
+    padding: 30px 32px;
+}
+
+.titulo-principal {
+    margin-bottom: 30px;
+}
+
+.titulo-principal h1 {
+    margin-bottom: 8px;
+    font-size: 32px;
+    color: #713B53;
+}
+
+.titulo-principal p {
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+
+/* Tablero */
+
+.task-board-tablero {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* Columnas */
+
+.columna {
+    min-width: 0;
+    min-height: 320px;
+    padding: 16px;
+    background-color: rgba(255, 251, 253, 0.72);
+    border: 1px solid #EACAD8;
+    border-radius: 12px;
+    transition: background-color 0.5s ease, border-color 0.5s ease, transform 0.2s ease;
+}
+
+.columna-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.columna-encabezado h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Contadores */
+
+.cantidad-task {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 4px 8px;
+    background-color: rgba(248, 231, 239, 0.9);
+    color: #713B53;
+    border-radius: 50%;
+    font-size: 13px;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+
+/* Lista de tareas */
+
+.lista-tareas {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/* Tarjetas */
+
+.tarjeta-tarea {
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid #EACAD8;
+    border-left: 4px solid #D96C96;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+    cursor: grab;
+    transition: background-color 0.5s ease, border-color 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-tarea:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(113, 59, 83, 0.12);
+}
+
+.tarjeta-tarea:active {
+    cursor: grabbing;
+}
+
+.tarjeta-tarea h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #713B53;
+}
+
+.tarjeta-tarea p {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.tarjeta-tarea button {
+    margin-top: 8px;
+}
+
+.tarjeta-tarea button + button {
+    margin-left: 8px;
+}
+
+
+/* Formulario emergente */
+
+#contenedorform {
+    width: 90%;
+    max-width: 480px;
+    max-height: 90vh;
+    padding: 24px;
+    border: 1px solid #EACAD8;
+    border-radius: 14px;
+    background-color: #FFFBFD;
+    color: #713B53;
+    overflow-y: auto;
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+#contenedorform::backdrop {
+    background-color: rgba(65, 30, 46, 0.45);
+}
+
+.encabezado-formNuevaTarea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.encabezado-formNuevaTarea h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.btn-cerrar {
+    padding: 7px 12px !important;
+}
+
+.camposForm {
+    margin-bottom: 16px;
+}
+
+.camposForm label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.camposForm .form-control,
+.camposForm .form-select {
+    border: 1px solid #DDB8C8;
+    border-radius: 8px;
+}
+
+.camposForm .form-control:focus,
+.camposForm .form-select:focus {
+    border-color: #D96C96;
+    box-shadow: 0 0 0 0.2rem rgba(217, 108, 150, 0.2);
+}
+
+#btnGuardarTarea {
+    width: 100%;
+}
+
+
+/* Toggle de tema */
+
+.toggle-tema {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px;
+    background-color: #F1E6FF;
+    border-radius: 50px;
+    width: fit-content;
+    transition: background-color 0.5s ease;
+}
+
+.toggle-tema button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #77778A;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-tema button.activo {
+    background-color: #FFFFFF;
+    color: #8B5CF6;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.toggle-tema button:hover {
+    transform: scale(1.05);
+}
+
+
+/* Tema oscuro */
+
+body[data-theme="dark"] {
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+
+/* Encabezado oscuro */
+
+body[data-theme="dark"] header {
+    background-color: rgba(26, 26, 26, 0.82);
+    border-bottom-color: #333333;
+}
+
+body[data-theme="dark"] .banner {
+    color: #FFFFFF;
+}
+
+
+/* Título oscuro */
+
+body[data-theme="dark"] .titulo-principal h1 {
+    color: #FFFFFF;
+}
+
+
+/* Columnas oscuras */
+
+body[data-theme="dark"] .columna {
+    background-color: rgba(30, 30, 30, 0.75);
+    border-color: #333333;
+    color: #FFFFFF;
+}
+
+
+/* Contadores oscuros */
+
+body[data-theme="dark"] .cantidad-task {
+    background-color: rgba(51, 51, 51, 0.9);
+    color: #FFFFFF;
+}
+
+
+/* Tarjetas oscuras */
+
+body[data-theme="dark"] .tarjeta-tarea {
+    background-color: rgba(42, 42, 42, 0.88);
+    border-color: #444444;
+    border-left-color: #FFFFFF;
+    color: #FFFFFF;
+}
+
+body[data-theme="dark"] .tarjeta-tarea h3 {
+    color: #FFFFFF;
+}
+
+body[data-theme="dark"] .tarjeta-tarea:hover {
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.08);
+}
+
+
+/* Botones en modo oscuro */
+
+body[data-theme="dark"] button.btn {
+    background-color: #FFFFFF;
+    color: #121212;
+    border: 1px solid #FFFFFF;
+}
+
+body[data-theme="dark"] button.btn:hover {
+    background-color: #E5E5E5;
+    color: #121212;
+}
+
+
+/* Formulario oscuro */
+
+body[data-theme="dark"] #contenedorform {
+    background-color: #1E1E1E;
+    color: #FFFFFF;
+    border-color: #444444;
+}
+
+body[data-theme="dark"] #contenedorform input,
+body[data-theme="dark"] #contenedorform textarea,
+body[data-theme="dark"] #contenedorform select {
+    background-color: #2A2A2A;
+    color: #FFFFFF;
+    border-color: #555555;
+}
+
+body[data-theme="dark"] #contenedorform input:focus,
+body[data-theme="dark"] #contenedorform textarea:focus,
+body[data-theme="dark"] #contenedorform select:focus {
+    border-color: #FFFFFF;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.15);
+}
+
+
+/* Toggle oscuro */
+
+body[data-theme="dark"] .toggle-tema {
+    background-color: #333333;
+}
+
+body[data-theme="dark"] .toggle-tema button {
+    color: #AAAAAA;
+}
+
+body[data-theme="dark"] .toggle-tema button.activo {
+    background-color: #FFFFFF;
+    color: #121212;
+}
+
+
+/* Fondos animados */
+
+.fondos-animados {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.video-fondo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+
+/* Fondo claro */
+
+body[data-theme="light"] #videoModoClaro {
+    opacity: 1;
+}
+
+
+/* Fondo oscuro */
+
+body[data-theme="dark"] #videoModoOscuro {
+    opacity: 1;
+}
+
+
+/* Capa de legibilidad */
+
+.fondos-animados::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+}
+
+
+/* Capa oscura */
+
+body[data-theme="dark"] .fondos-animados::after {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+
+/* Contenido por encima del fondo */
+
+header,
+main {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Pantallas medianas */
+
+@media (max-width: 1100px) {
+    .task-board-tablero {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* Celulares */
+
+@media (max-width: 600px) {
+    header {
+        padding: 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .banner {
+        font-size: 20px;
+    }
+
+    .header-acciones {
+        gap: 8px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    main {
+        padding: 22px 16px;
+    }
+
+    .titulo-principal h1 {
+        font-size: 26px;
+    }
+
+    .task-board-tablero {
+        grid-template-columns: 1fr;
+    }
+
+    .columna {
+        min-height: auto;
+    }
+}
